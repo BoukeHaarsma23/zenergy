@@ -276,6 +276,7 @@ static const struct x86_cpu_id bit32_rapl_cpus[] = {
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x01, NULL),	/* Zen3 Threadripper */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x21, NULL),	/* Zen3 */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x50, NULL),	/* Cezanne */
+	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x44, NULL),	/* Rembrandt */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x60, NULL),	/* Rembrandt */
 	{}
 };
@@ -373,6 +374,7 @@ static const struct x86_cpu_id cpu_ids[] __initconst = {
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x01, NULL),	/* Zen3 Threadripper */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x21, NULL),	/* Zen3 */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x50, NULL),	/* Cezanne */
+	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x44, NULL),	/* Rembrandt */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x60, NULL),	/* Rembrandt */
 	{}
 };
