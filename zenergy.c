@@ -287,7 +287,8 @@ static const struct x86_cpu_id bit32_rapl_cpus[] = {
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x50, NULL),	/* Cezanne */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x44, NULL),	/* Rembrandt */
 	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x60, NULL),	/* Rembrandt */
-	X86_MATCH_VENDOR_FAM_MODEL(AMD, 0x19, 0x61, NULL),	/* Zen 4 */
+	// Zen4 (0x19, 0x61) features 64-bit registers for both Core::X86::Msr::CORE_ENERGY_STAT & L3::L3CT::L3PackageEnergyStatus),
+	// c.f., https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/56713-B1_3_05.zip
 	{}
 };
 
@@ -337,6 +338,7 @@ static int zenergy_probe(struct platform_device *pdev)
 	 */
 	if (!x86_match_cpu(bit32_rapl_cpus)) {
 		data->do_not_accum = true;
+		pr_info("CPU supports 64-bit RAPL MSR registers\n");
 		return 0;
 	}
 
