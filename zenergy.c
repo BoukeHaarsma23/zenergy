@@ -24,6 +24,7 @@
 #include <linux/slab.h>
 #include <linux/topology.h>
 #include <linux/types.h>
+#include <linux/version.h>
 
 #define DRV_MODULE_DESCRIPTION	"AMD energy driver"
 #define DRV_MODULE_VERSION	"1.0"
@@ -207,7 +208,9 @@ static int amd_create_sensor(struct device *dev,
 			     enum hwmon_sensor_types type, u32 config)
 {
 	struct hwmon_channel_info *info = &data->energy_info;
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0)
 	struct cpuinfo_x86 *c = &boot_cpu_data;
+#endif
 	struct sensor_accumulator *accums;
 	int i, num_siblings, cpus, sockets;
 	u32 *s_config;
@@ -223,10 +226,15 @@ static int amd_create_sensor(struct device *dev,
 	cpus = num_present_cpus() / num_siblings;
 
 	/*
-	 * c->x86_max_cores is the linux count of physical cores
+	 * topology_num_cores_per_package (or c->x86_max_cores prior to 6.9) is
+	 * the linux count of physical cores.
 	 * total physical cores/ core per socket gives total number of sockets.
 	 */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0)
 	sockets = cpus / c->x86_max_cores;
+#else
+	sockets = cpus / topology_num_cores_per_package();
+#endif
 
 	s_config = devm_kcalloc(dev, cpus + sockets + 1,
 				sizeof(u32), GFP_KERNEL);
