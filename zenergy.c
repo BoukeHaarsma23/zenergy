@@ -210,12 +210,14 @@ static int amd_create_sensor(struct device *dev,
 	struct hwmon_channel_info *info = &data->energy_info;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0)
 	struct cpuinfo_x86 *c = &boot_cpu_data;
+	int num_siblings;
 #endif
 	struct sensor_accumulator *accums;
-	int i, num_siblings, cpus, sockets;
+	int i, cpus, sockets;
 	u32 *s_config;
 	char (*label_l)[10];
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0)
 	/* Identify the number of siblings per core */
 	num_siblings = ((cpuid_ebx(0x8000001e) >> 8) & 0xff) + 1;
 
@@ -230,9 +232,10 @@ static int amd_create_sensor(struct device *dev,
 	 * the linux count of physical cores.
 	 * total physical cores/ core per socket gives total number of sockets.
 	 */
-#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 9, 0)
+
 	sockets = cpus / c->x86_max_cores;
 #else
+	cpus = num_present_cpus() / __max_threads_per_core;
 	sockets = cpus / topology_num_cores_per_package();
 #endif
 
