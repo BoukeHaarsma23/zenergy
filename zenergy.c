@@ -350,14 +350,20 @@ static int zenergy_probe(struct platform_device *pdev)
 	return PTR_ERR_OR_ZERO(data->wrap_accumulate);
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0)
 static int zenergy_remove(struct platform_device *pdev)
+#else
+static void zenergy_remove(struct platform_device *pdev)
+#endif
 {
 	struct zenergy_data *data = dev_get_drvdata(&pdev->dev);
 
 	if (data && data->wrap_accumulate)
 		kthread_stop(data->wrap_accumulate);
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 11, 0)
 	return 0;
+#endif
 }
 
 static const struct platform_device_id zenergy_ids[] = {
